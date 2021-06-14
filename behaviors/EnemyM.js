@@ -35,7 +35,7 @@ class EnemyM extends AI {
 
         // Check if we should shoot
         if (this.now() > this.lastShot + this.shotTimeout) {
-            this.scene.createBullet(this.obj.x, this.obj.y + 50, true);
+            this.scene.createEnemyBullet(this.obj.x, this.obj.y + 50, true);
             this.lastShot = this.now();
             this.bullets--;
         }
