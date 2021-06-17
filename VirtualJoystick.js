@@ -58,6 +58,15 @@ class VirtualJoystick {
     }
 
     /**
+     * @returns The angle from -pi to pi that the joystick is currently at from
+     * the center. This uses Phaser's angle system, where 0rad is to the right,
+     * and going up from there is negative and down from there is positive.
+     */
+    joyR() {
+        return Phaser.Math.Angle.BetweenPoints(this, this.stick);
+    }
+
+    /**
      * Attempts to drag the stick to a given position, but restricts it based on radius
      * @param {Phaser.GameObjects.Arc} stick The game object representing the stick
      * @param {number} dragX X position being dragged to
