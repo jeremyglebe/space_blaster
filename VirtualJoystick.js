@@ -30,10 +30,14 @@ class VirtualJoystick {
 
         // Handle dragging the stick
         scene.input.on('drag', (_, stick, dragX, dragY) => {
-            this.dragStick(stick, dragX, dragY);
+            if (stick === this.stick) {
+                this.dragStick(dragX, dragY);
+            }
         });
         scene.input.on('dragend', (_, stick) => {
-            this.resetStick(stick);
+            if (stick === this.stick) {
+                this.resetStick();
+            }
         });
     }
 
@@ -41,7 +45,7 @@ class VirtualJoystick {
      * @returns Value ranging from -1 to 1 representing how far the stick is in
      * the X direction
      */
-    joyX(){
+    joyX() {
         return (this.stick.x - this.x) / this.radius;
     }
 
@@ -49,7 +53,7 @@ class VirtualJoystick {
      * @returns Value ranging from -1 to 1 representing how far the stick is in
      * the Y direction
      */
-    joyY(){
+    joyY() {
         return (this.stick.y - this.y) / this.radius;
     }
 
@@ -59,21 +63,21 @@ class VirtualJoystick {
      * @param {number} dragX X position being dragged to
      * @param {number} dragY Y position being dragged to
      */
-    dragStick(stick, dragX, dragY) {
+    dragStick(dragX, dragY) {
         // Get the distance from center to drag point
         let dist = Phaser.Math.Distance.Between(this.x, this.y, dragX, dragY);
         // If we aren't outside the radius, move the stick to that position
         if (dist < this.radius) {
-            stick.x = dragX;
-            stick.y = dragY;
+            this.stick.x = dragX;
+            this.stick.y = dragY;
         }
         // If we are outside the radius, move the stick towards the pointer but not on it
         else {
             let angle = Phaser.Math.Angle.Between(this.x, this.y, dragX, dragY);
             let xRadius = Math.cos(angle) * this.radius;
             let yRadius = Math.sin(angle) * this.radius;
-            stick.x = this.x + xRadius;
-            stick.y = this.y + yRadius;
+            this.stick.x = this.x + xRadius;
+            this.stick.y = this.y + yRadius;
         }
     }
 
@@ -81,7 +85,7 @@ class VirtualJoystick {
      * Reset's the sticks position to the center
      * @param {Phaser.GameObjects.Arc} stick The game object representing the stick
      */
-    resetStick(stick) {
-        stick.setPosition(this.x, this.y);
+    resetStick() {
+        this.stick.setPosition(this.x, this.y);
     }
 }
