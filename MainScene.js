@@ -33,6 +33,11 @@ class MainScene extends Phaser.Scene {
         this.bulletEnemyCollider = null;
         this.bulletPlayerCollider = null;
         this.enemyPlayerCollider = null;
+        /**
+         * Parallax background objects
+         * @type {Phaser.GameObjects.TileSprite[]}
+         */
+        this.parallax = [];
     }
 
     init(data) {
@@ -45,6 +50,8 @@ class MainScene extends Phaser.Scene {
     }
 
     preload() {
+        // Load parallax background
+        for (let i = 0; i < 3; i++) this.load.image(`bg${i}`, `./assets/bg${i}.png`);
         // Spritesheets must also include width and height of frames when loading
         this.load.spritesheet('explosion', './assets/explosion-1.png', {
             frameWidth: 32,
@@ -68,6 +75,12 @@ class MainScene extends Phaser.Scene {
     }
 
     create() {
+        // Create the parallax background
+        for (let i = 0; i < 3; i++) {
+            let spr = this.add.tileSprite(0, 0, 450, 800, `bg${i}`);
+            spr.setOrigin(0);
+            this.parallax.push(spr);
+        }
         // Create the text for keeping track of score
         this.scoreText = this.add.text(225, 10, `${this.score}`, {
             fontSize: '40px'
@@ -98,6 +111,10 @@ class MainScene extends Phaser.Scene {
         // End the game if necessary
         if (this.gameOver) {
             this.onGameOver();
+        }
+        // Parallax movement
+        for(let i = 0; i < 3; i++){
+            this.parallax[i].tilePositionY -= i + 1;
         }
     }
 
